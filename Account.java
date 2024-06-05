@@ -1,16 +1,14 @@
 public class Account {
     private int accountNumber; // account number
     private int pin; // PIN for authentication
-    private double availableBalance; // funds available for withdrawal
-    private double totalBalance; // funds available + pending deposits
+    private double totalBalance;
     private int admin;
     private String username;
 
-    public Account(int accountNumber, int pin, double availableBalance, double totalBalance, int admin,
+    public Account(int accountNumber, int pin, double totalBalance, int admin,
             String username) {
         this.accountNumber = accountNumber;
         this.pin = pin;
-        this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.admin = admin;
         this.username = username;
@@ -24,16 +22,28 @@ public class Account {
         }
     }
 
+    public boolean deposit(double amount) {
+        if (amount > 0) {
+            totalBalance += amount;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= totalBalance) {
+            totalBalance -= amount;
+            return true;
+        }
+        return false;
+    }
+
     public int getAccountNumber() {
         return accountNumber;
     }
 
     public int getPin() {
         return pin;
-    }
-
-    public double getAvailableBalance() {
-        return availableBalance;
     }
 
     public double getTotalBalance() {
@@ -54,10 +64,6 @@ public class Account {
 
     public void setPin(int pin) {
         this.pin = pin;
-    }
-
-    public void setAvailableBalance(double availableBalance) {
-        this.availableBalance = availableBalance;
     }
 
     public void setTotalBalance(double totalBalance) {
