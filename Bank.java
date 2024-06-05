@@ -67,4 +67,34 @@ public class Bank {
        // never hit this
        return 0.00;
    }
+
+   public double deposit(int accountNumber, double amount) {
+       if (amount < 0) {
+           return 0.00;
+       }
+        try {
+           double totalBalance = checkBalance(accountNumber);
+
+           DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+           Connection connection = databaseConnection.getConnection();
+
+           // Example query
+           String query = "UPDATE accounts SET total_balance = ? WHERE account_number = ?";
+           PreparedStatement updateStatement = connection.prepareStatement(query);
+            updateStatement.setDouble(1, totalBalance + amount);
+            updateStatement.setInt(2, accountNumber);
+
+           updateStatement.executeUpdate();
+           updateStatement.close();
+
+            return checkBalance(accountNumber);
+
+       } catch (SQLException e) {
+           // TODO handle exception
+           e.printStackTrace();
+       }
+
+       // never hit this
+       return 0.00;
+   }
 }
