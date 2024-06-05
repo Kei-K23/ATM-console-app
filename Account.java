@@ -14,6 +14,10 @@ public class Account {
         this.username = username;
     }
 
+    public Account() {
+
+    }
+
     public boolean isValidate(int pin) {
         if (getPin() == pin) {
             return true;

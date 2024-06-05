@@ -35,6 +35,7 @@ clean() {
 # Parse command line arguments to determine which function to execute
 case $1 in
     compile)
+        clean
         compile
         ;;
     run)

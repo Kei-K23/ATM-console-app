@@ -1,28 +1,40 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class Database {
 
-    static List<Account> accounts = new ArrayList<>();
-
-    public Database() {
-        // The original array has been changed into an arraylist, this makes it easier
-        // to add/delete from the database
-        Account accounts1 = new Account(12345, 12345, 11111, 0, "Customer1");
-        Account accounts2 = new Account(12346, 12345, 11111, 0, "Customer2");
-        Account accounts3 = new Account(12347, 12345, 11111, 0, "Customer3");
-        Account accounts4 = new Account(12348, 12345, 11111, 0, "Customer4");
-
-        accounts.add(accounts1);
-        accounts.add(accounts2);
-        accounts.add(accounts3);
-        accounts.add(accounts4);
-    }
-
     public Account findUserByAccountNumber(int accountNumber) {
-        Optional<Account> accountOptional = accounts.stream().filter(a -> a.getAccountNumber() == accountNumber)
-                .findFirst();
-        return accountOptional.orElse(null);
+        try {
+            DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+            Connection connection = databaseConnection.getConnection();
+            Account account = new Account();
+
+            // Example query
+            String query = "SELECT * FROM accounts WHERE account_number = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, 123456);  // Example account number
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                account.setAccountNumber(resultSet.getInt("account_number"));
+                account.setPin(resultSet.getInt("pin"));
+                account.setTotalBalance(resultSet.getDouble("total_balance"));
+                account.setAdmin(resultSet.getInt("admin"));
+                account.setUsername(resultSet.getString("username"));
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+
+            return account;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // never hit this
+        return null;
     }
 }

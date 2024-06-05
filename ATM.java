@@ -11,10 +11,9 @@ public class ATM {
 
     public void run() {
         System.out.println("Enter you ATM Account number");
-        final String ACCOUNT_NUMBER = scanner.nextLine();
+        final int ACCOUNT_NUMBER = scanner.nextInt();
 
         Account account = bank.findUserByAccountNumber(ACCOUNT_NUMBER);
-
         if (account == null) {
             System.out.println("Invalid Account Number");
             return;

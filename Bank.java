@@ -1,22 +1,40 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Bank {
-    private Map<String, Account> accounts = new HashMap<String, Account>();
+    public Account findUserByAccountNumber(int accountNumber) {
+        try {
+            DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+            Connection connection = databaseConnection.getConnection();
+            Account account = new Account();
 
-    public Bank() {
-        Account accounts1 = new Account(12345, 12345, 11111, 0, "Customer1");
-        Account accounts2 = new Account(12346, 12345, 11111, 0, "Customer2");
-        Account accounts3 = new Account(12347, 12345, 11111, 0, "Customer3");
-        Account accounts4 = new Account(12348, 12345, 11111, 0, "Customer4");
+            // Example query
+            String query = "SELECT * FROM accounts WHERE account_number = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, accountNumber);  // Example account number
 
-        accounts.put("12345", accounts1);
-        accounts.put("12346", accounts2);
-        accounts.put("12347", accounts3);
-        accounts.put("12348", accounts4);
-    }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                account.setAccountNumber(resultSet.getInt("account_number"));
+                account.setPin(resultSet.getInt("pin"));
+                account.setTotalBalance(resultSet.getDouble("total_balance"));
+                account.setAdmin(resultSet.getInt("admin"));
+                account.setUsername(resultSet.getString("username"));
+            }
 
-    public Account findUserByAccountNumber(String accountNumber) {
-        return accounts.get(accountNumber);
+            resultSet.close();
+            preparedStatement.close();
+
+            return account;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // never hit this
+        return null;
     }
 }
