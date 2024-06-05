@@ -39,7 +39,8 @@ public class ATM {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Check Balance");
+                    double totalBalance = bank.checkBalance(ACCOUNT_NUMBER);
+                    System.out.println("Total Balance :: " + totalBalance);
                     break;
                 case 2:
                     System.out.println("Deposit");

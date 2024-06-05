@@ -31,10 +31,40 @@ public class Bank {
 
             return account;
         } catch (SQLException e) {
+            // TODO handle exception
             e.printStackTrace();
         }
 
         // never hit this
         return null;
     }
+
+   public double checkBalance(int accountNumber) {
+       try {
+           DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+           Connection connection = databaseConnection.getConnection();
+           Account account = new Account();
+
+           // Example query
+           String query = "SELECT total_balance FROM accounts WHERE account_number = ?";
+           PreparedStatement preparedStatement = connection.prepareStatement(query);
+           preparedStatement.setInt(1, accountNumber);  // Example account number
+
+           ResultSet resultSet = preparedStatement.executeQuery();
+           while (resultSet.next()) {
+               account.setTotalBalance(resultSet.getDouble("total_balance"));
+           }
+
+           resultSet.close();
+           preparedStatement.close();
+
+           return account.getTotalBalance();
+       } catch (SQLException e) {
+           // TODO handle exception
+           e.printStackTrace();
+       }
+
+       // never hit this
+       return 0.00;
+   }
 }

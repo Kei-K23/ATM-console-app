@@ -26,22 +26,6 @@ public class Account {
         }
     }
 
-    public boolean deposit(double amount) {
-        if (amount > 0) {
-            totalBalance += amount;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean withdraw(double amount) {
-        if (amount > 0 && amount <= totalBalance) {
-            totalBalance -= amount;
-            return true;
-        }
-        return false;
-    }
-
     public int getAccountNumber() {
         return accountNumber;
     }
