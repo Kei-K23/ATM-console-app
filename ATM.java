@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 public class ATM {
-    private Bank bank;
-    private Scanner scanner;
+    private final Bank bank;
+    private final Scanner scanner;
 
     public ATM(Bank bank) {
         this.bank = bank;
@@ -44,9 +44,17 @@ public class ATM {
                     break;
                 case 2:
                     System.out.println("Deposit");
+                    System.out.println("How much amount to deposit");
+                    double amountForDeposit = scanner.nextDouble();
+                    double newBalanceForDeposit = bank.deposit(ACCOUNT_NUMBER, amountForDeposit);
+                    System.out.println("New Balance :: " + newBalanceForDeposit);
                     break;
                 case 3:
                     System.out.println("Withdraw");
+                    System.out.println("How much amount to withdraw");
+                    double amountForWithdraw = scanner.nextDouble();
+                    double newBalanceForWithdraw = bank.withdraw(ACCOUNT_NUMBER, amountForWithdraw);
+                    System.out.println("New Balance :: " + newBalanceForWithdraw);
                     break;
                 case 4:
                     System.out.println("Exit");
